@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate called")
@@ -17,7 +17,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val getRowData = GetRawData()
+        val getRowData = GetRawData(this)
+//        getRowData.onDownloadCompletedListener(this)
         getRowData.execute("https://www.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1")
 
 //        fab.setOnClickListener { view ->
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 //        private const val TAG = "MainActivity"
 //    }
 
-    private fun onDownloadCompleted(data: String, status: DownloadStatus) {
+    override fun onDownloadComplete(data: String, status: DownloadStatus) {
         if (status == DownloadStatus.OK) {
             Log.d(TAG, "onDownloadDataCompleted called, data is $data")
         } else {
