@@ -9,7 +9,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete {
+class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete,
+    GetFlickerJsonData.OnDataAvailable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate called")
@@ -52,10 +53,24 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete {
 
     override fun onDownloadComplete(data: String, status: DownloadStatus) {
         if (status == DownloadStatus.OK) {
-            Log.d(TAG, "onDownloadDataCompleted called, data is $data")
+            Log.d(TAG, "onDownloadDataCompleted called")
+
+            val getFlickerJsonData = GetFlickerJsonData(this)
+            getFlickerJsonData.execute(data)
+
         } else {
             // Download failed
             Log.d(TAG, "onDownlaodDataCompleted failed, status is $status. Error message is $data")
         }
+    }
+
+    override fun onDataAvailable(data: List<Photo>) {
+        Log.d(TAG, ".onDataAvailable called. Data is $data")
+
+        Log.d(TAG, ".onDataAvailable ends")
+    }
+
+    override fun onError(e: Exception) {
+        Log.d(TAG, ".onError called with ${e.message}")
     }
 }
