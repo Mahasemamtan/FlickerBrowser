@@ -1,16 +1,21 @@
 package bojanantic.example.flickerbrowser
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
 private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete,
     GetFlickerJsonData.OnDataAvailable {
+
+    private var flickerRecyclerViewAdapter = FlickerRecyclerViewAdapter(ArrayList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate called")
@@ -18,15 +23,40 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete,
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        recyclert_view.layoutManager = LinearLayoutManager(this)
+        recyclert_view.adapter = flickerRecyclerViewAdapter
+
         val getRowData = GetRawData(this)
 //        getRowData.onDownloadCompletedListener(this)
-        getRowData.execute("https://www.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1")
+        val url = buildUri(
+            "https://www.flickr.com/services/feeds/photos_public.gne",
+            "motorcycle",
+            "en-us",
+            true
+        )
+        getRowData.execute(url)
 
 //        fab.setOnClickListener { view ->
 //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show()
 //        }
         Log.d(TAG, "onCreate ends")
+    }
+
+    private fun buildUri(
+        baseURL: String,
+        searchParameter: String,
+        lang: String,
+        mathcAll: Boolean
+    ): String {
+        Log.d(TAG, ".buildUri started")
+        return Uri.parse(baseURL).buildUpon()
+            .appendQueryParameter("tags", searchParameter)
+            .appendQueryParameter("lang", lang)
+            .appendQueryParameter("format", "json")
+            .appendQueryParameter("tagmode", if (mathcAll) "ALL" else "ANY")
+            .appendQueryParameter("nojsoncallback", "1")
+            .build().toString()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -65,8 +95,8 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete,
     }
 
     override fun onDataAvailable(data: List<Photo>) {
-        Log.d(TAG, ".onDataAvailable called. Data is $data")
-
+        Log.d(TAG, ".onDataAvailable called")
+        flickerRecyclerViewAdapter.loadNewData(data)
         Log.d(TAG, ".onDataAvailable ends")
     }
 
