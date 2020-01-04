@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
+private const val TAG = "FlickerAdapter"
+
 class FlickerImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var thumbnail: ImageView = view.findViewById(R.id.thumbnail)
     var title: TextView = view.findViewById(R.id.title)
@@ -16,7 +18,6 @@ class FlickerImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 class FlickerRecyclerViewAdapter(private var photoList: List<Photo>) :
     RecyclerView.Adapter<FlickerImageViewHolder>() {
-    private val TAG = "FlickerAdapter"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlickerImageViewHolder {
         // Called by LayoutManager whenever it needs a new view
