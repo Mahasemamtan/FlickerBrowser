@@ -26,13 +26,11 @@ class FlickerRecyclerViewAdapter(private var photoList: List<Photo>) :
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG, ".getItemCount called")
         return if (photoList.isNotEmpty()) photoList.size else 0
     }
 
     override fun onBindViewHolder(holder: FlickerImageViewHolder, position: Int) {
         val photoItem = photoList[position]
-        Log.d(TAG, ".onBindViewHolder: ${photoItem.title} --> $position")
         Picasso.with(holder.thumbnail.context).load(photoItem.image)
             .error(R.drawable.placeholder)
             .placeholder(R.drawable.placeholder)
