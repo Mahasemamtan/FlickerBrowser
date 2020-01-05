@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+
+<!--    purple-->
+    <color name="primary">@color/md_deep_purple_500</color>
+    <color name="primary_dark">@color/md_deep_purple_700</color>
+    <color name="primary_light">@color/md_deep_purple_100</color>
+    <color name="accent">@color/md_purple_A200</color>
+    <color name="primary_text">@color/md_grey_900</color>
+    <color name="secondary_text">@color/md_grey_600</color>
+    <color name="icons">@color/md_white_1000</color>
+    <color name="divider">@color/md_grey_400</color>
+
+<!--    gray/yellow-->
+<!--    <color name="primary">#607D8B</color>-->
+<!--    <color name="primary_dark">#455A64</color>-->
+<!--    <color name="primary_light">#CFD8DC</color>-->
+<!--    <color name="accent">#FFC107</color>-->
+<!--    <color name="primary_text">#212121</color>-->
+<!--    <color name="secondary_text">#757575</color>-->
+<!--    <color name="icons">#FFFFFF</color>-->
+<!--    <color name="divider">#BDBDBD</color>-->
 </resources>
