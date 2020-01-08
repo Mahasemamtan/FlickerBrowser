@@ -3,6 +3,7 @@ package bojanantic.example.flickerbrowser
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -29,20 +30,6 @@ class MainActivity : BaseActivity(), GetRawData.OnDownloadComplete,
         recyclert_view.addOnItemTouchListener(RecyclerItemClickListener(this, recyclert_view, this))
         recyclert_view.adapter = flickerRecyclerViewAdapter
 
-        val getRowData = GetRawData(this)
-//        getRowData.onDownloadCompletedListener(this)
-        val url = buildUri(
-            "https://www.flickr.com/services/feeds/photos_public.gne",
-            "motorcycle",
-            "en-us",
-            true
-        )
-        getRowData.execute(url)
-
-//        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
         Log.d(TAG, "onCreate ends")
     }
 
@@ -90,7 +77,10 @@ class MainActivity : BaseActivity(), GetRawData.OnDownloadComplete,
         // as you specify a parent activity in AndroidManifest.xml.
         Log.d(TAG, "onOptionsItemSelected called")
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_search -> {
+                startActivity(Intent(this, SearchActivity::class.java))
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -120,5 +110,26 @@ class MainActivity : BaseActivity(), GetRawData.OnDownloadComplete,
 
     override fun onError(e: Exception) {
         Log.d(TAG, ".onError called with ${e.message}")
+    }
+
+    override fun onResume() {
+        Log.d(TAG, ".onResume called")
+        super.onResume()
+
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val queryResult = sharedPref.getString(FLICKER_QUERY, "")
+
+        if (!queryResult.isNullOrEmpty()) {
+            val getRowData = GetRawData(this)
+            val url = buildUri(
+                "https://www.flickr.com/services/feeds/photos_public.gne",
+                queryResult,
+                "en-us",
+                true
+            )
+            getRowData.execute(url)
+        }
+
+        Log.d(TAG, ".onResume ends")
     }
 }
