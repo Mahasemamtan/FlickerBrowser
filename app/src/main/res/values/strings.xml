@@ -9,4 +9,5 @@
     <string name="photo_author_text">%1$s %2$s %3$s</string>
     <string name="action_search">Search</string>
     <string name="searchable_hint">Enter photo tags</string>
+    <string name="flicker_browser_no_image_placeholder">No photos matching the search entry.\n\nUse the search button for photos.</string>
 </resources>

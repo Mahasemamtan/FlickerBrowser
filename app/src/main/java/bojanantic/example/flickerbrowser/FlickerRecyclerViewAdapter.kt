@@ -27,17 +27,24 @@ class FlickerRecyclerViewAdapter(private var photoList: List<Photo>) :
     }
 
     override fun getItemCount(): Int {
-        return if (photoList.isNotEmpty()) photoList.size else 0
+        return if (photoList.isNotEmpty()) photoList.size else 1
     }
 
     override fun onBindViewHolder(holder: FlickerImageViewHolder, position: Int) {
-        val photoItem = photoList[position]
-        Picasso.with(holder.thumbnail.context).load(photoItem.image)
-            .error(R.drawable.placeholder)
-            .placeholder(R.drawable.placeholder)
-            .into(holder.thumbnail)
 
-        holder.title.text = photoItem.title
+
+        if (photoList.isEmpty()) {
+            holder.thumbnail.setImageResource(R.drawable.placeholder)
+            holder.title.setText(R.string.flicker_browser_no_image_placeholder)
+        } else {
+            val photoItem = photoList[position]
+            Picasso.with(holder.thumbnail.context).load(photoItem.image)
+                .error(R.drawable.placeholder)
+                .placeholder(R.drawable.placeholder)
+                .into(holder.thumbnail)
+
+            holder.title.text = photoItem.title
+        }
     }
 
     fun loadNewData(newPhotos: List<Photo>) {
